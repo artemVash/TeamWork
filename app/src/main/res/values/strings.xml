@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">TeamWork2</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
+    <string name="enter_coordinates">Enter coordinates</string>
 </resources>
