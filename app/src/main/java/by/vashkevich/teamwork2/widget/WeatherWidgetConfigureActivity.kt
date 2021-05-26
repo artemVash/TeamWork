@@ -1,6 +1,5 @@
 package by.vashkevich.teamwork2.widget
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Context
@@ -8,55 +7,26 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
-import android.widget.TextView
-import androidx.lifecycle.ViewModelProvider
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import by.vashkevich.teamwork2.R
-import by.vashkevich.teamwork2.WeatherViewModel
 
 /**
  * The configuration screen for the [WeatherWidget] AppWidget.
  */
 class WeatherWidgetConfigureActivity : Activity() {
-
-    private val viewModel by lazy {
-        ViewModelProvider.AndroidViewModelFactory(application).create(WeatherViewModel::class.java)
-    }
-
-    companion object {
-        val ACTION_PROGRESS_OFF = "action"
-    }
-
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
-    private lateinit var latitudeText: EditText
-    private lateinit var longitudeText: EditText
+
+    //долгота.широта
+    private lateinit var latText: EditText
+    private lateinit var lonText: EditText
 
     private var onClickListener = View.OnClickListener {
         val context = this@WeatherWidgetConfigureActivity
 
-
-        var temp: Double
-        //var temp1: Double
-        //val array = ArrayList<Any>()
-
-        viewModel.daysLiveData.observeForever {
-            temp = it.daily[0].temp.dayTemp
-            //temp1 = it.daily[0].temp.nightTemp
-
-
-            val intent = Intent(ACTION_PROGRESS_OFF)
-            intent.putExtra("pop", temp)
-            LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
-
-            // val y = Intent().putExtra("pop", temp)
-
-        }
-
-        viewModel.load(
-            latitudeText.text.toString().toDouble(),
-            longitudeText.text.toString().toDouble()
-        )
-
+        // When the button is clicked, store the string locally
+        val lat = latText.text.toString()
+        val lon = lonText.text.toString()
+        saveLatitude(context, appWidgetId, lat)
+        saveLongitude(context, appWidgetId, lon)
 
         // It is the responsibility of the configuration activity to update the app widget
         val appWidgetManager = AppWidgetManager.getInstance(context)
@@ -69,7 +39,6 @@ class WeatherWidgetConfigureActivity : Activity() {
         finish()
     }
 
-    @SuppressLint("WrongViewCast")
     public override fun onCreate(icicle: Bundle?) {
         super.onCreate(icicle)
 
@@ -78,8 +47,8 @@ class WeatherWidgetConfigureActivity : Activity() {
         setResult(RESULT_CANCELED)
 
         setContentView(R.layout.weather_widget_configure)
-        latitudeText = findViewById<View>(R.id.add_latitude_text) as EditText
-        longitudeText = findViewById<View>(R.id.add_longitude_text) as EditText
+        latText = findViewById<View>(R.id.add_latitude_text) as EditText
+        lonText = findViewById<View>(R.id.add_longitude_text) as EditText
         findViewById<View>(R.id.add_button).setOnClickListener(onClickListener)
 
         // Find the widget id from the intent.
@@ -97,28 +66,44 @@ class WeatherWidgetConfigureActivity : Activity() {
             return
         }
     }
+
 }
 
-private const val PREFS_NAME = "by.vashkevich.teamwork2.widget.WeatherWidget"
+private const val PREFS_NAME = "by.vashkevich.teamwork2.widget.WeatherWidget2"
 private const val PREF_PREFIX_KEY = "appwidget_"
+private const val PREF_LAT_SUFFIX = "_lat"
+private const val PREF_LON_SUFFIX = "_lon"
 
-// Write the prefix to the SharedPreferences object for this widget
-internal fun saveTitlePref(context: Context, appWidgetId: Int, text: String) {
+internal fun saveLatitude(context: Context, appWidgetId: Int, lat: String) {
     val prefs = context.getSharedPreferences(PREFS_NAME, 0).edit()
-    prefs.putString(PREF_PREFIX_KEY + appWidgetId, text)
+    prefs.putString(PREF_PREFIX_KEY + appWidgetId + PREF_LAT_SUFFIX, lat)
     prefs.apply()
 }
 
-// Read the prefix from the SharedPreferences object for this widget.
-// If there is no preference saved, get the default from a resource
-internal fun loadTitlePref(context: Context, appWidgetId: Int): String {
+internal fun deleteLatitude(context: Context, appWidgetId: Int) {
+    val prefs = context.getSharedPreferences(PREFS_NAME, 0).edit()
+    prefs.remove(PREF_PREFIX_KEY + appWidgetId + PREF_LAT_SUFFIX)
+    prefs.apply()
+}
+
+internal fun loadLatitude(context: Context, appWidgetId: Int): String {
     val prefs = context.getSharedPreferences(PREFS_NAME, 0)
-    val titleValue = prefs.getString(PREF_PREFIX_KEY + appWidgetId, null)
-    return titleValue ?: context.getString(R.string.appwidget_text)
+    return prefs.getString(PREF_PREFIX_KEY + appWidgetId + PREF_LAT_SUFFIX, null) ?: "0"
 }
 
-internal fun deleteTitlePref(context: Context, appWidgetId: Int) {
+internal fun saveLongitude(context: Context, appWidgetId: Int, lon: String) {
     val prefs = context.getSharedPreferences(PREFS_NAME, 0).edit()
-    prefs.remove(PREF_PREFIX_KEY + appWidgetId)
+    prefs.putString(PREF_PREFIX_KEY + appWidgetId + PREF_LON_SUFFIX, lon)
     prefs.apply()
+}
+
+internal fun deleteLongitude(context: Context, appWidgetId: Int) {
+    val prefs = context.getSharedPreferences(PREFS_NAME, 0).edit()
+    prefs.remove(PREF_PREFIX_KEY + appWidgetId + PREF_LON_SUFFIX)
+    prefs.apply()
+}
+
+internal fun loadLongitude(context: Context, appWidgetId: Int): String {
+    val prefs = context.getSharedPreferences(PREFS_NAME, 0)
+    return prefs.getString(PREF_PREFIX_KEY + appWidgetId + PREF_LON_SUFFIX, null) ?: "0"
 }
