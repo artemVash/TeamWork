@@ -1,7 +1,7 @@
 package by.vashkevich.teamwork2.networking.weather
 
-import by.vashkevich.teamwork2.BuildConfig
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import com.squareup.picasso.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

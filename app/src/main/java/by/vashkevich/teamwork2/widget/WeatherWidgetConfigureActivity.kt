@@ -1,5 +1,6 @@
 package by.vashkevich.teamwork2.widget
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Context
@@ -7,20 +8,55 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
+import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import by.vashkevich.teamwork2.R
+import by.vashkevich.teamwork2.WeatherViewModel
 
 /**
  * The configuration screen for the [WeatherWidget] AppWidget.
  */
 class WeatherWidgetConfigureActivity : Activity() {
-    private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
-    private lateinit var appWidgetText: EditText
-    private var onClickListener = View.OnClickListener {
-        val context = this@NewAppWidgetConfigureActivity
 
-        // When the button is clicked, store the string locally
-        val widgetText = appWidgetText.text.toString()
-        saveTitlePref(context, appWidgetId, widgetText)
+    private val viewModel by lazy {
+        ViewModelProvider.AndroidViewModelFactory(application).create(WeatherViewModel::class.java)
+    }
+
+    companion object {
+        val ACTION_PROGRESS_OFF = "action"
+    }
+
+    private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
+    private lateinit var latitudeText: EditText
+    private lateinit var longitudeText: EditText
+
+    private var onClickListener = View.OnClickListener {
+        val context = this@WeatherWidgetConfigureActivity
+
+
+        var temp: Double
+        //var temp1: Double
+        //val array = ArrayList<Any>()
+
+        viewModel.daysLiveData.observeForever {
+            temp = it.daily[0].temp.dayTemp
+            //temp1 = it.daily[0].temp.nightTemp
+
+
+            val intent = Intent(ACTION_PROGRESS_OFF)
+            intent.putExtra("pop", temp)
+            LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
+
+            // val y = Intent().putExtra("pop", temp)
+
+        }
+
+        viewModel.load(
+            latitudeText.text.toString().toDouble(),
+            longitudeText.text.toString().toDouble()
+        )
+
 
         // It is the responsibility of the configuration activity to update the app widget
         val appWidgetManager = AppWidgetManager.getInstance(context)
@@ -33,6 +69,7 @@ class WeatherWidgetConfigureActivity : Activity() {
         finish()
     }
 
+    @SuppressLint("WrongViewCast")
     public override fun onCreate(icicle: Bundle?) {
         super.onCreate(icicle)
 
@@ -41,7 +78,8 @@ class WeatherWidgetConfigureActivity : Activity() {
         setResult(RESULT_CANCELED)
 
         setContentView(R.layout.weather_widget_configure)
-        appWidgetText = findViewById<View>(R.id.appwidget_text) as EditText
+        latitudeText = findViewById<View>(R.id.add_latitude_text) as EditText
+        longitudeText = findViewById<View>(R.id.add_longitude_text) as EditText
         findViewById<View>(R.id.add_button).setOnClickListener(onClickListener)
 
         // Find the widget id from the intent.
@@ -49,7 +87,8 @@ class WeatherWidgetConfigureActivity : Activity() {
         val extras = intent.extras
         if (extras != null) {
             appWidgetId = extras.getInt(
-                    AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+                AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID
+            )
         }
 
         // If this activity was started with an intent without an app widget ID, finish with an error.
@@ -57,10 +96,7 @@ class WeatherWidgetConfigureActivity : Activity() {
             finish()
             return
         }
-
-        appWidgetText.setText(loadTitlePref(this@WeatherWidgetConfigureActivity, appWidgetId))
     }
-
 }
 
 private const val PREFS_NAME = "by.vashkevich.teamwork2.widget.WeatherWidget"
