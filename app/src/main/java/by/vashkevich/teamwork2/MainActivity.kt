@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import by.vashkevich.teamwork2.widget.WeatherWidgetConfigureActivity
 
 class MainActivity : AppCompatActivity() {
 
