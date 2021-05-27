@@ -1,5 +1,7 @@
 package by.vashkevich.teamwork2.data.entities.weather
 
+import android.os.Parcelable
+
 
 data class Days(
     val daily: List<Daily>,

@@ -1,5 +1,6 @@
 package by.vashkevich.teamwork2
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -18,5 +19,8 @@ class MainActivity : AppCompatActivity() {
 
         val text = findViewById<TextView>(R.id.text_new)
 
+
     }
+
+
 }

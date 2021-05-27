@@ -3,14 +3,20 @@ package by.vashkevich.teamwork2.widget
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.graphics.Bitmap
 import android.util.Log
 import android.widget.RemoteViews
 import by.vashkevich.teamwork2.R
+import by.vashkevich.teamwork2.data.entities.weather.Days
 import by.vashkevich.teamwork2.repositories.weather.WeatherRepository
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.sql.Date
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Implementation of App Widget functionality.
@@ -18,9 +24,9 @@ import kotlinx.coroutines.withContext
  */
 class WeatherWidget : AppWidgetProvider() {
     override fun onUpdate(
-        context: Context,
-        appWidgetManager: AppWidgetManager,
-        appWidgetIds: IntArray
+            context: Context,
+            appWidgetManager: AppWidgetManager,
+            appWidgetIds: IntArray
     ) {
         // There may be multiple widgets active, so update all of them
         for (appWidgetId in appWidgetIds) {
@@ -46,9 +52,9 @@ class WeatherWidget : AppWidgetProvider() {
 }
 
 internal fun updateAppWidget(
-    context: Context,
-    appWidgetManager: AppWidgetManager,
-    appWidgetId: Int
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int
 ) {
     val lat: Double = loadLatitude(context, appWidgetId).toDouble()
     val lon: Double = loadLongitude(context, appWidgetId).toDouble()
@@ -57,31 +63,68 @@ internal fun updateAppWidget(
 }
 
 private fun load(
-    lat: Double,
-    lon: Double,
-    context: Context,
-    appWidgetManager: AppWidgetManager,
-    appWidgetId: Int
+        lat: Double,
+        lon: Double,
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int
 ) {
     //классика .репозиторий .скоуп
     val repository = WeatherRepository.getRepository()
     val ioScope = CoroutineScope(Dispatchers.IO)
     ioScope.launch {
-        val resultDays = try {
+        val resultDays: Days? = try {
             repository.loadWeather(lat, lon)
         } catch (e: Exception) {
-            Log.e("Weather", "Error in loadWeather", e)
+            null
         }
         Log.d("Weather", "Result $resultDays")
         withContext(Dispatchers.Main) {
             // Construct the RemoteViews object
 
+
             val views = RemoteViews(context.packageName, R.layout.weather_widget)
-//             views.setTextViewText(R.id.appwidget_TEXT, resultDays.toString())
+
+            val arrayData = listOf<Int>(R.id.data1, R.id.data2, R.id.data3, R.id.data4)
+            val arrayIcon = listOf<Int>(R.id.icon1, R.id.icon2, R.id.icon3, R.id.icon4)
+            val arrayTemperature = listOf<Int>(R.id.temperature1, R.id.temperature2, R.id.temperature3, R.id.temperature4)
+
+            for (x in arrayData) {
+                views.setTextViewText(x, resultDays?.daily?.get(arrayData.indexOf(x))?.dt?.let { current(it.toLong()) })
+            }
+
+//            for (x in arrayIcon) {
+//                CoroutineScope(Dispatchers.IO).launch {
+//                    views.setImageViewBitmap(x, resultDays?.daily?.get(0)?.weather?.get(0)?.let { image(it.icon) })
+//
+//                }
+//
+//            }
+
+
+            for (x in arrayTemperature) {
+                views.setTextViewText(x, resultDays?.daily?.get(arrayTemperature.indexOf(x))?.temp?.dayTemp.toString())
+            }
+
             //TODO resultDays вставлять уже во вьюхи лайаута
 
             // Instruct the widget manager to update the widget
             appWidgetManager.updateAppWidget(appWidgetId, views)
         }
     }
+
 }
+
+private fun current(time: Long): String {
+    val current = time * 1000
+    val date = Date(current)
+    val simpleDateFormat = SimpleDateFormat("d.MM", Locale.getDefault())
+    return simpleDateFormat.format(date)
+}
+
+//private fun image(image: String): Bitmap {
+//
+//    val a = "https://openweathermap.org/img/wn/${image}@2x.png"
+//
+//    return Picasso.get().load(a).get()
+//}
