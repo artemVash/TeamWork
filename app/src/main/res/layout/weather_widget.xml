@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="200dp"
-    android:background="@drawable/weather5"
     android:alpha="100"
+    android:background="@drawable/weather5"
     android:padding="@dimen/widget_margin"
     android:theme="@style/ThemeOverlay.TeamWork2.AppWidgetContainer">
 
@@ -26,41 +26,41 @@
                 android:id="@+id/data1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:layout_weight="0.3"
+                android:gravity="center"
+                android:textColor="@color/white"
                 android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/data2"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:layout_weight="0.3"
+                android:gravity="center"
+                android:textColor="@color/white"
                 android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/data3"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:layout_weight="0.3"
+                android:gravity="center"
+                android:textColor="@color/white"
                 android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/data4"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:layout_weight="0.3"
+                android:gravity="center"
+                android:textColor="@color/white"
                 android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"/>
+                android:textStyle="bold" />
 
 
         </LinearLayout>
@@ -75,26 +75,34 @@
                 android:id="@+id/icon1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-
-                android:layout_weight="0.5" />
+                android:layout_weight="0.5"
+                android:scaleType="centerInside"
+                tools:src="@drawable/d02"
+                 />
 
             <ImageView
                 android:id="@+id/icon2"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="0.5" />
+                android:layout_weight="0.5"
+                android:scaleType="centerInside"
+                tools:src="@drawable/d02"/>
 
             <ImageView
                 android:id="@+id/icon3"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="0.5" />
+                android:layout_weight="0.5"
+                android:scaleType="centerInside"
+                tools:src="@drawable/d02"/>
 
             <ImageView
                 android:id="@+id/icon4"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="0.5" />
+                android:layout_weight="0.5"
+                android:scaleType="centerInside"
+                tools:src="@drawable/d02"/>
 
 
         </LinearLayout>
@@ -109,41 +117,41 @@
                 android:id="@+id/temperature1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:layout_weight="0.3"
+                android:gravity="center"
+                android:textColor="@color/white"
                 android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="@color/white" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/temperature2"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:layout_weight="0.3"
+                android:gravity="center"
+                android:textColor="@color/white"
                 android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="@color/white" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/temperature3"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:layout_weight="0.3"
+                android:gravity="center"
+                android:textColor="@color/white"
                 android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="@color/white" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/temperature4"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:layout_weight="0.3"
+                android:gravity="center"
+                android:textColor="@color/white"
                 android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="@color/white" />
+                android:textStyle="bold" />
 
 
         </LinearLayout>
@@ -153,8 +161,8 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="200dp"
-        android:layout_weight="0.2"
         android:layout_marginHorizontal="8dp"
+        android:layout_weight="0.2"
         android:gravity="center"
         android:orientation="vertical">
 
