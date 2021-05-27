@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="200dp"
-    android:background="?attr/appWidgetBackgroundColor"
+    android:background="@drawable/weather5"
+    android:alpha="100"
     android:padding="@dimen/widget_margin"
     android:theme="@style/ThemeOverlay.TeamWork2.AppWidgetContainer">
 
@@ -10,45 +11,56 @@
         android:layout_width="wrap_content"
         android:layout_height="200dp"
         android:layout_weight="1"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_margin="8dp"
             android:layout_weight="1"
             tools:ignore="NestedWeights">
 
 
             <TextView
                 android:id="@+id/data1"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:padding="1dp"
-                android:textSize="16sp"
                 android:gravity="center"
-                android:layout_weight="1"
-                />
+                android:layout_weight="0.3"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"/>
 
             <TextView
                 android:id="@+id/data2"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"/>
+                android:gravity="center"
+                android:layout_weight="0.3"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"/>
 
             <TextView
                 android:id="@+id/data3"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                />
+                android:gravity="center"
+                android:layout_weight="0.3"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"/>
 
             <TextView
                 android:id="@+id/data4"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                />
+                android:gravity="center"
+                android:layout_weight="0.3"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"/>
 
 
         </LinearLayout>
@@ -56,31 +68,33 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginHorizontal="8dp"
             android:layout_weight="1">
 
             <ImageView
                 android:id="@+id/icon1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"/>
+
+                android:layout_weight="0.5" />
 
             <ImageView
                 android:id="@+id/icon2"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"/>
+                android:layout_weight="0.5" />
 
             <ImageView
                 android:id="@+id/icon3"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"/>
+                android:layout_weight="0.5" />
 
             <ImageView
                 android:id="@+id/icon4"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"/>
+                android:layout_weight="0.5" />
 
 
         </LinearLayout>
@@ -88,35 +102,48 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_margin="8dp"
             android:layout_weight="1">
 
             <TextView
                 android:id="@+id/temperature1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                />
+                android:gravity="center"
+                android:layout_weight="0.3"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/temperature2"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                />
+                android:gravity="center"
+                android:layout_weight="0.3"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/temperature3"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                />
+                android:gravity="center"
+                android:layout_weight="0.3"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/temperature4"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                />
+                android:gravity="center"
+                android:layout_weight="0.3"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/white" />
 
 
         </LinearLayout>
@@ -127,21 +154,22 @@
         android:layout_width="wrap_content"
         android:layout_height="200dp"
         android:layout_weight="0.2"
+        android:layout_marginHorizontal="8dp"
         android:gravity="center"
         android:orientation="vertical">
 
         <ImageButton
             android:id="@+id/setting_btn"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:background="@drawable/ic_settings" />
 
         <ImageButton
             android:id="@+id/refresh_btn"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:background="@drawable/ic_autorenew"
-            android:layout_marginTop="50dp"/>
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/ic_autorenew" />
 
 
     </LinearLayout>
