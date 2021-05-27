@@ -65,7 +65,6 @@ internal fun updateAppWidget(
     val lat: Double = loadLatitude(context, appWidgetId).toDouble()
     val lon: Double = loadLongitude(context, appWidgetId).toDouble()
     load(lat, lon, context, appWidgetManager, appWidgetId)
-    //здесь не нужно больше ничего писать, все вставляется во вьюхи в методе ниже
 }
 
 private fun load(
@@ -75,7 +74,6 @@ private fun load(
     appWidgetManager: AppWidgetManager,
     appWidgetId: Int
 ) {
-    //классика .репозиторий .скоуп
     val repository = WeatherRepository.getRepository()
     val ioScope = CoroutineScope(Dispatchers.IO)
     ioScope.launch {
@@ -110,7 +108,7 @@ private fun load(
                 )
 
                 for (numberDataView in arrayDataView) {
-                    val dayDate = current(
+                    val dayDate = setDateFormat(
                         resultDays.daily[arrayDataView.indexOf(numberDataView)]
                             .dt
                             .toLong()
@@ -133,6 +131,13 @@ private fun load(
                         numberTempView,
                         "$dayTemp°/$nightTemp°"
                     )
+                }
+
+                for (numberIconView in arrayIconView) {
+                    val icon = resultDays.daily[arrayIconView.indexOf(numberIconView)]
+                        .weather[0]
+                        .icon
+                    views.setImageViewResource(numberIconView, setImage(icon))
                 }
                 // Instruct the widget manager to update the widget
                 val intent = Intent(context, WeatherWidget::class.java)
@@ -160,20 +165,26 @@ private fun load(
             }
         }
     }
-
-
 }
 
-private fun current(time: Long): String {
+private fun setDateFormat(time: Long): String {
     val current = time * 1000
     val date = Date(current)
     val simpleDateFormat = SimpleDateFormat("d.MM", Locale.getDefault())
     return simpleDateFormat.format(date)
 }
 
-//private fun image(image: String): Bitmap {
-//
-//    val a = "https://openweathermap.org/img/wn/${image}@2x.png"
-//
-//    return Picasso.get().load(a).get()
-//}
+private fun setImage(icon: String): Int {
+    return when (icon) {
+        "01d" -> R.drawable.d01
+        "02d" -> R.drawable.d02
+        "03d" -> R.drawable.d03
+        "04d" -> R.drawable.d04
+        "09d" -> R.drawable.d09
+        "10d" -> R.drawable.d10
+        "11d" -> R.drawable.d11
+        "13d" -> R.drawable.d13
+        "50d" -> R.drawable.d50
+        else -> R.drawable.error_image
+    }
+}
