@@ -1,13 +1,19 @@
 package by.vashkevich.teamwork2.widget
 
+import android.Manifest
 import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import by.vashkevich.teamwork2.R
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 
 /**
  * The configuration screen for the [WeatherWidget] AppWidget.
@@ -18,6 +24,8 @@ class WeatherWidgetConfigureActivity : Activity() {
     //долгота.широта
     private lateinit var latText: EditText
     private lateinit var lonText: EditText
+
+    private lateinit var fusedLocationProvider: FusedLocationProviderClient
 
     private var onClickListener = View.OnClickListener {
         val context = this@WeatherWidgetConfigureActivity
@@ -65,8 +73,39 @@ class WeatherWidgetConfigureActivity : Activity() {
             finish()
             return
         }
+        requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE_LOCATION)
+
+        fusedLocationProvider = LocationServices.getFusedLocationProviderClient(this)
+
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        when (PackageManager.PERMISSION_GRANTED) {
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) -> {
+                Toast.makeText(this, "Разрешение уже есть", Toast.LENGTH_SHORT).show()
+                fusedLocationProvider.lastLocation.addOnCompleteListener {
+                    latText.setText(it.result.latitude.toString())
+                    lonText.setText(it.result.longitude.toString())
+                }
+            }
+            else -> {
+                Toast.makeText(this, "Agree to use your location in settings", Toast.LENGTH_SHORT)
+                    .show()
+
+            }
+        }
+    }
+
+    companion object {
+        const val REQUEST_CODE_LOCATION = 1
+    }
 }
 
 private const val PREFS_NAME = "by.vashkevich.teamwork2.widget.WeatherWidget2"
