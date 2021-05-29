@@ -1,7 +1,5 @@
 package by.vashkevich.teamwork2
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class WeatherViewModel(application: Application) : AndroidViewModel(application) {
+class WeatherViewModel() : ViewModel() {
 
     private val repository = WeatherRepository.getRepository()
     private val ioScope = CoroutineScope(Dispatchers.IO)
@@ -29,6 +27,8 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
             }
         }
     }
+    private val icon = _daysLiveData.value?.daily?.get(0)?.weather?.get(0)?.icon
+
 
 }
 

@@ -4,4 +4,7 @@
     <string name="configure">Configure</string>
     <string name="add_widget">Add widget</string>
     <string name="enter_coordinates">Enter coordinates</string>
+    <string name="you_can_create">you can create a widget which will display the weather forecast for 4 days</string>
+    <string name="to_weather_app">to the weather app</string>
+    <string name="welcome">Welcome</string>
 </resources>

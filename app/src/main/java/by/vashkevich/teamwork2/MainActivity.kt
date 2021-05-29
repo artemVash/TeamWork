@@ -1,11 +1,8 @@
 package by.vashkevich.teamwork2
 
-import android.content.Intent
 import android.os.Bundle
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import by.vashkevich.teamwork2.widget.WeatherWidgetConfigureActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,11 +13,5 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        val text = findViewById<TextView>(R.id.text_new)
-
-
     }
-
-
 }
