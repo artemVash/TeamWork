@@ -1,6 +1,7 @@
 package by.vashkevich.teamwork2.widget
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Context
@@ -9,11 +10,8 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
-import android.widget.Toast
-import androidx.core.content.ContextCompat
 import by.vashkevich.teamwork2.R
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 
 /**
  * The configuration screen for the [WeatherWidget] AppWidget.
@@ -73,10 +71,16 @@ class WeatherWidgetConfigureActivity : Activity() {
             finish()
             return
         }
-        requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE_LOCATION)
 
         fusedLocationProvider = LocationServices.getFusedLocationProviderClient(this)
-
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            updateUiFromLastLocation()
+        } else {
+            requestPermissions(
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                REQUEST_CODE_LOCATION
+            )
+        }
     }
 
     override fun onRequestPermissionsResult(
@@ -84,22 +88,16 @@ class WeatherWidgetConfigureActivity : Activity() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        when (PackageManager.PERMISSION_GRANTED) {
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) -> {
-                Toast.makeText(this, "Разрешение уже есть", Toast.LENGTH_SHORT).show()
-                fusedLocationProvider.lastLocation.addOnCompleteListener {
-                    latText.setText(it.result.latitude.toString())
-                    lonText.setText(it.result.longitude.toString())
-                }
-            }
-            else -> {
-                Toast.makeText(this, "Agree to use your location in settings", Toast.LENGTH_SHORT)
-                    .show()
+        if (requestCode == REQUEST_CODE_LOCATION && grantResults.first() == PackageManager.PERMISSION_GRANTED) {
+            updateUiFromLastLocation()
+        }
+    }
 
-            }
+    @SuppressLint("MissingPermission")
+    private fun updateUiFromLastLocation() {
+        fusedLocationProvider.lastLocation.addOnCompleteListener {
+            latText.setText(it.result.latitude.toString())
+            lonText.setText(it.result.longitude.toString())
         }
     }
 

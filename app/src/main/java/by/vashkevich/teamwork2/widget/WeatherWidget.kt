@@ -1,16 +1,21 @@
 package by.vashkevich.teamwork2.widget
 
+import android.Manifest
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.util.Log
 import android.widget.RemoteViews
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import by.vashkevich.teamwork2.R
 import by.vashkevich.teamwork2.data.entities.weather.Days
 import by.vashkevich.teamwork2.repositories.weather.WeatherRepository
+import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,6 +33,7 @@ class WeatherWidget : AppWidgetProvider() {
     companion object {
         const val TAG = "tag"
     }
+
 
     override fun onUpdate(
         context: Context,
@@ -62,9 +68,24 @@ internal fun updateAppWidget(
     appWidgetManager: AppWidgetManager,
     appWidgetId: Int
 ) {
-    val lat: Double = loadLatitude(context, appWidgetId).toDouble()
-    val lon: Double = loadLongitude(context, appWidgetId).toDouble()
-    load(lat, lon, context, appWidgetManager, appWidgetId)
+    when (PackageManager.PERMISSION_GRANTED) {
+        ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) -> {
+            Toast.makeText(context, "Разрешение уже есть", Toast.LENGTH_SHORT).show()
+            val fusedLocationProvide = LocationServices.getFusedLocationProviderClient(context)
+            fusedLocationProvide.lastLocation.addOnCompleteListener { location ->
+                val lat = location.result.latitude
+                val lon = location.result.longitude
+                load(lat, lon, context, appWidgetManager, appWidgetId)
+            }
+        }
+        else -> {
+            Toast.makeText(context, "Agree to use your location in settings", Toast.LENGTH_SHORT)
+                .show()
+        }
+    }
 }
 
 private fun load(
@@ -106,6 +127,7 @@ private fun load(
                     R.id.temperature3,
                     R.id.temperature4
                 )
+
 
                 for (numberDataView in arrayDataView) {
                     val dayDate = setDateFormat(
